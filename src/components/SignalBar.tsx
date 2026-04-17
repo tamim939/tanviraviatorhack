@@ -154,11 +154,11 @@ export const SignalBar: React.FC<SignalBarProps> = ({
   }
 
   return (
-    <div className="relative flex items-center justify-between px-3.5 py-2.5 bg-[#0f172a] border-b border-white/5 h-[64px]">
+    <div className="relative flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-gray-100 h-[64px]">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
-          <span className="text-gray-500 font-bold text-base">P:</span>
-          <span className="font-mono font-black text-white text-lg tracking-tight">
+          <span className="text-gray-400 font-bold text-base">P:</span>
+          <span className="font-mono font-black text-black text-lg tracking-tight">
             {currentPeriod?.slice(-6) || "..."}
           </span>
         </div>
@@ -170,7 +170,7 @@ export const SignalBar: React.FC<SignalBarProps> = ({
               cy="12"
               r="10.5"
               fill="none"
-              stroke="rgba(255,255,255,0.05)"
+              stroke="#f3f4f6"
               strokeWidth="1.5"
             />
             <circle
@@ -183,10 +183,10 @@ export const SignalBar: React.FC<SignalBarProps> = ({
               strokeDasharray="65.97"
               strokeDashoffset={65.97 * (1 - progress / 100)}
               strokeLinecap="round"
-              className="transition-all duration-1000 shadow-[0_0_10px_rgba(37,99,235,0.5)]"
+              className="transition-all duration-1000"
             />
           </svg>
-          <span className="relative font-mono font-black text-xs text-white">
+          <span className="relative font-mono font-black text-xs text-black">
             {secondsLeft}
           </span>
         </div>
@@ -200,19 +200,19 @@ export const SignalBar: React.FC<SignalBarProps> = ({
             className={cn(
               "flex items-center gap-3 px-7 py-2.5 rounded-full font-black text-base uppercase tracking-wider text-white transition-all shadow-xl",
               signal === "BIG" 
-                ? "bg-[#ff3b3b] shadow-red-500/20 ring-[4px] ring-red-500/10" 
-                : "bg-[#22c55e] shadow-green-500/20 ring-[4px] ring-green-500/10"
+                ? "bg-[#ff3b3b] shadow-red-500/40 ring-[6px] ring-red-500/10" 
+                : "bg-[#22c55e] shadow-green-500/40 ring-[6px] ring-green-500/10"
             )}
           >
             <div className={cn(
-              "w-2.5 h-2.5 rounded-full border-2 border-white/40 shadow-[0_0_8px_rgba(255,255,255,0.8)]",
+              "w-3 h-3 rounded-full border-2 border-white/40 shadow-[0_0_8px_rgba(255,255,255,0.8)]",
               "bg-white" 
             )} />
             {signal}
           </motion.div>
         ) : (
-          <div className="px-6 py-2.5 rounded-full bg-white/5 text-gray-500 text-[10px] font-black uppercase tracking-widest animate-pulse border border-white/5">
-            Syncing...
+          <div className="px-6 py-2.5 rounded-full bg-gray-50 text-gray-400 text-xs font-black uppercase tracking-widest animate-pulse border border-gray-100">
+            Wait...
           </div>
         )}
       </div>
