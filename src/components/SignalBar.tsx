@@ -49,81 +49,103 @@ export const SignalBar: React.FC<SignalBarProps> = ({
         style={{ scale: boxScale }}
         className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center pointer-events-auto touch-none origin-center"
       >
-        <div className="relative p-3 rounded-[1.25rem] bg-[#0c1427]/95 backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col items-center min-w-[200px]">
+        <div className="relative p-3 rounded-2xl bg-gradient-to-b from-[#1a1c2e] to-[#0a0b1e] backdrop-blur-3xl border-2 border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.15)] flex flex-col items-center min-w-[210px] ring-1 ring-white/5">
+          {/* VIP Badge */}
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-amber-400 to-yellow-600 rounded-full shadow-lg shadow-amber-500/20 border border-amber-300/50 flex items-center gap-1">
+            <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-[0_0_4px_white]" />
+            <span className="text-[9px] font-black text-white uppercase tracking-tighter">Premium VIP</span>
+          </div>
+
           {/* Zoom Controller */}
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/80 backdrop-blur-lg px-2.5 py-1 rounded-full border border-white/20 shadow-lg pointer-events-auto">
+          <div className="absolute top-4 right-3 flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity">
             <button 
               onClick={() => setBoxScale(prev => Math.max(0.4, prev - 0.1))}
-              className="w-5 h-5 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white text-sm font-bold transition-all"
+              className="w-4 h-4 flex items-center justify-center bg-white/10 rounded-sm text-white text-[8px] font-bold"
             >
               -
             </button>
-            <div className="flex flex-col items-center px-0.5">
-              <span className="text-[9px] font-mono font-black text-cyan-400 leading-none">
-                {Math.round(boxScale * 100)}%
-              </span>
-            </div>
             <button 
               onClick={() => setBoxScale(prev => Math.min(2.5, prev + 0.1))}
-              className="w-5 h-5 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white text-sm font-bold transition-all"
+              className="w-4 h-4 flex items-center justify-center bg-white/10 rounded-sm text-white text-[8px] font-bold"
             >
               +
             </button>
           </div>
 
           {/* Header */}
-          <h2 className="text-cyan-400 font-black text-[10px] tracking-widest mb-2.5 uppercase w-full text-center leading-none">
-            Aviator Predictor
+          <h2 className="text-amber-500/80 font-black text-[9px] tracking-[0.2em] mt-2 mb-3 uppercase w-full text-center leading-none italic">
+            Algorithm v4.2
           </h2>
 
           {/* Main Circle Display */}
-          <div className="relative w-24 h-24 mb-3">
-            <div className="absolute inset-0 rounded-full border-[3px] border-[#1a2b4b] flex items-center justify-center overflow-hidden bg-[#081021]">
-              <div className="flex flex-col items-center justify-center h-full w-full">
+          <div className="relative w-28 h-28 mb-4">
+            {/* Outer ring glow */}
+            <div className="absolute inset-[-4px] rounded-full bg-amber-500/10 blur-[8px]" />
+            
+            <div className="absolute inset-0 rounded-full border-[1.5px] border-amber-500/20 flex items-center justify-center overflow-hidden bg-black/40 shadow-inner">
+              {/* Scanline effect */}
+              <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(245,158,11,0.03)_50%,transparent_100%)] bg-[length:100%_4px] animate-[scan_2s_linear_infinite]" />
+              
+              <div className="flex flex-col items-center justify-center h-full w-full relative z-10">
                 {isAnalyzing && (
-                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px]">
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#0a0b1e]/80 backdrop-blur-sm">
                     <motion.div 
                       animate={{ rotate: 360 }}
-                      transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-                      className="w-6 h-6 border-2 border-cyan-500 border-t-transparent rounded-full mb-1"
+                      transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
+                      className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full mb-2 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
                     />
-                    <span className="text-[10px] font-black text-cyan-400 animate-pulse tracking-widest uppercase">
-                      Analyzing...
+                    <span className="text-[10px] font-black text-amber-500 animate-pulse tracking-[0.15em] uppercase">
+                      Syncing...
                     </span>
                   </div>
                 )}
                 
-                <motion.span 
-                  key={signal}
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="text-2xl font-black text-white"
-                >
-                  {signal || "0.00x"}
-                </motion.span>
+                <div className="flex flex-col items-center pt-1">
+                  <span className="text-[8px] font-black text-amber-500/40 uppercase tracking-widest mb-0.5">Predicted</span>
+                  <motion.span 
+                    key={signal}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="text-3xl font-mono font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                  >
+                    {signal || "0.00x"}
+                  </motion.span>
+                  <div className="h-0.5 w-8 bg-amber-500/20 mt-1 rounded-full" />
+                </div>
               </div>
             </div>
+            
+            {/* Circular Progress (Static Decorative) */}
+            <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none opacity-30" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-amber-500" strokeDasharray="4 4" />
+            </svg>
           </div>
 
           {/* Buttons Row */}
-          <div className="flex gap-2 w-full">
+          <div className="flex gap-2 w-full pt-1">
             <button
               onClick={handleNext}
               disabled={isAnalyzing}
               className={cn(
-                "flex-1 py-1.5 rounded-md font-black text-[10px] uppercase tracking-wider transition-all active:scale-95 border",
+                "flex-1 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-[0.1em] transition-all active:scale-95 border group relative overflow-hidden",
                 isAnalyzing 
                   ? "bg-slate-800/50 cursor-not-allowed text-white/30 border-white/5" 
-                  : "bg-emerald-500 text-[#0c1427] border-emerald-300/30"
+                  : "bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-amber-400/50 shadow-lg shadow-amber-500/20"
               )}
             >
-              Next ➔
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                Get Next Result
+                <span className="group-hover:translate-x-0.5 transition-transform italic text-amber-200">➔</span>
+              </span>
+              {/* Shine effect */}
+              {!isAnalyzing && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />}
             </button>
           </div>
           
-          <div className="w-full flex justify-center mt-3">
-            <div className="text-[6px] font-black text-white/10 uppercase tracking-widest">
-              Drag to move
+          <div className="w-full flex justify-between items-center mt-3.5 px-1">
+            <span className="text-[7px] font-black text-white/10 uppercase tracking-widest">v4.2.0-secure</span>
+            <div className="flex gap-0.5">
+              {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-emerald-500/20" />)}
             </div>
           </div>
         </div>
