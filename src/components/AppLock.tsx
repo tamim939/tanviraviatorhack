@@ -27,7 +27,7 @@ export const AppLock: React.FC<{ children: React.ReactNode }> = ({ children }) =
     }
   };
 
-  const telegramLink = `https://t.me/TRADER_TANVIR_EX?text=${encodeURIComponent('ভাইয়া আমি একটা নিতে চাই কি করতে হবে')}`;
+  const telegramLink = `https://t.me/TRADER_TANVIR_EX?text=${encodeURIComponent('ভাইয়া আপনার হ্যাক টি পেতে হলে আমার কি কি করতে হবে প্লিজ বলুন 😥')}`;
 
   if (!isLocked) return <>{children}</>;
 

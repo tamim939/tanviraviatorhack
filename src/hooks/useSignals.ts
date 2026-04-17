@@ -10,9 +10,7 @@ export interface SignalData {
 }
 
 const vibrate = () => {
-  if (navigator.vibrate) {
-    navigator.vibrate([200, 100, 200, 100, 300]);
-  }
+  // Vibration disabled as requested
 };
 
 const fetchLatestSignal = async (): Promise<SignalData> => {

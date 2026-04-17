@@ -87,7 +87,7 @@ export const SignalBar: React.FC<SignalBarProps> = ({
                       transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
                       className="w-6 h-6 border-2 border-cyan-500 border-t-transparent rounded-full mb-1"
                     />
-                    <span className="text-[6px] font-black text-cyan-400 animate-pulse tracking-widest uppercase">
+                    <span className="text-[10px] font-black text-cyan-400 animate-pulse tracking-widest uppercase">
                       Analyzing...
                     </span>
                   </div>

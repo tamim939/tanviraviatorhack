@@ -74,6 +74,10 @@ export const UserPanel: React.FC = () => {
 
   const generateNewVipSignal = async () => {
     setIsAnalyzing(true);
+    setVipSignal('');
+    
+    // Force 2 seconds loading delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -110,73 +114,79 @@ export const UserPanel: React.FC = () => {
   useHeartbeat();
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-white relative font-sans select-text overflow-hidden">
-      <WelcomeModal />
-      <ResultOverlay result={result} onComplete={() => setResult(null)} />
-      <div className="z-20 relative shrink-0">
-        <SignalBar 
-          signal={isVipMode ? vipSignal : dbSignal} 
-          period={isVipMode ? vipPeriod : dbPeriod} 
-          currentPeriod={isVipMode ? vipPeriod : currentPeriod} 
-          secondsLeft={isVipMode ? vipSeconds : secondsLeft} 
-          maxSeconds={isVipMode ? (vipState === 'WAITING' ? 5 : 15) : 30}
-          isVip={isVipMode}
-          onManualSync={handleManualVipSignal}
-          onNextSignal={handleNextSignal}
-          isAnalyzing={isAnalyzing}
-        />
-        <div className="flex gap-2 p-2 bg-white border-b border-gray-100">
-          <button
-            onClick={() => {
-              setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
-              setIsVipMode(false);
-            }}
-            className={cn(
-              "flex-1 py-3 px-4 rounded-xl text-sm font-black uppercase tracking-wider transition-all active:scale-95 shadow-lg",
-              currentUrl === 'https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web' && !isVipMode
-                ? "bg-[#2563eb] text-white shadow-blue-500/30" 
-                : "bg-gray-100 text-gray-500 shadow-none hover:bg-gray-200"
-            )}
-          >
-            BD Win 24
-          </button>
-          <button
-            onClick={() => {
-              setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
-              setIsVipMode(true);
-              setVipSignal('');
-              setVipState('WAITING');
-              generateNewVipSignal(); // Immediate trigger when switching to VIP
-            }}
-            className={cn(
-              "flex-1 py-3 px-4 rounded-xl text-sm font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-1.5 shadow-lg",
-              isVipMode 
-                ? "bg-[#2563eb] text-white shadow-blue-500/30" 
-                : "bg-gray-100 text-gray-500 shadow-none hover:bg-gray-200"
-            )}
-          >
-            VIP ❤️
-          </button>
+    <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-0 sm:p-4">
+      <div className="w-full max-w-[440px] h-[100dvh] sm:h-[850px] sm:max-h-[90dvh] bg-white relative font-sans select-text overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:rounded-[2.5rem] border-[8px] border-[#1e293b] sm:border-[#1e293b]">
+        <WelcomeModal />
+        <ResultOverlay result={result} onComplete={() => setResult(null)} />
+        <div className="z-20 relative shrink-0">
+          <SignalBar 
+            signal={isVipMode ? vipSignal : dbSignal} 
+            period={isVipMode ? vipPeriod : dbPeriod} 
+            currentPeriod={isVipMode ? vipPeriod : currentPeriod} 
+            secondsLeft={isVipMode ? vipSeconds : secondsLeft} 
+            maxSeconds={isVipMode ? (vipState === 'WAITING' ? 5 : 15) : 30}
+            isVip={isVipMode}
+            onManualSync={handleManualVipSignal}
+            onNextSignal={handleNextSignal}
+            isAnalyzing={isAnalyzing}
+          />
+          <div className="flex gap-2 p-2 bg-white border-b border-gray-100">
+            <button
+              onClick={() => {
+                if (isAnalyzing) return;
+                setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
+                setIsVipMode(false);
+              }}
+              className={cn(
+                "flex-1 py-3 px-4 rounded-xl text-sm font-black uppercase tracking-wider transition-all active:scale-95 shadow-lg",
+                currentUrl === 'https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web' && !isVipMode
+                  ? "bg-[#2563eb] text-white shadow-blue-500/30" 
+                  : "bg-gray-100 text-gray-500 shadow-none hover:bg-gray-200",
+                isAnalyzing && "opacity-50 cursor-not-allowed"
+              )}
+            >
+              BD Win 24
+            </button>
+            <button
+              onClick={() => {
+                if (isAnalyzing) return;
+                setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
+                setIsVipMode(true);
+                setVipSignal('');
+                setVipState('WAITING');
+                generateNewVipSignal();
+              }}
+              className={cn(
+                "flex-1 py-3 px-4 rounded-xl text-sm font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-1.5 shadow-lg",
+                isVipMode 
+                  ? "bg-[#2563eb] text-white shadow-blue-500/30" 
+                  : "bg-gray-100 text-gray-500 shadow-none hover:bg-gray-200",
+                isAnalyzing && "opacity-50 cursor-not-allowed"
+              )}
+            >
+              VIP ❤️
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="flex-1 relative z-0 overflow-hidden bg-white">
-        <iframe
-          src={currentUrl}
-          className="absolute inset-0 w-full h-full border-none bg-white"
-          title="Game View"
-          allow="clipboard-write; fullscreen"
-          loading="lazy"
-        />
-        
-        {/* Floating Telegram Channel Button */}
-        <a 
-          href="https://t.me/+GT8s_D0ipJFkMzhl"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-[50] w-12 h-12 bg-[#0088cc] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-all border-2 border-white/20"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-        </a>
+        <div className="flex-1 relative z-0 overflow-hidden bg-white h-full">
+          <iframe
+            src={currentUrl}
+            className="absolute inset-0 w-full h-full border-none bg-white"
+            title="Game View"
+            allow="clipboard-write; fullscreen"
+            loading="lazy"
+          />
+          
+          {/* Floating Telegram Channel Button - now relative to frame */}
+          <a 
+            href="https://t.me/+GT8s_D0ipJFkMzhl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-6 right-6 z-[50] w-12 h-12 bg-[#0088cc] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-all border-2 border-white/20"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   );
