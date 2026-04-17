@@ -48,11 +48,14 @@ export const UserPanel: React.FC = () => {
     return () => clearInterval(interval);
   }, [isVipMode, vipState]);
 
+  /* 
+    Automatic auto-trigger removed to ensure purely manual interaction via 'Next' button
   useEffect(() => {
     if (isVipMode && vipState === 'ACTIVE' && vipSeconds === 0 && !isAnalyzing) {
       generateNewVipSignal();
     }
   }, [vipSeconds, isVipMode, vipState, isAnalyzing]);
+  */
   
   const syncVip = () => {
     setVipState('WAITING');
@@ -60,11 +63,14 @@ export const UserPanel: React.FC = () => {
     setVipSignal('');
   };
 
-  const handleManualVipSignal = () => {
-    // This is called when user clicks "GET SIGNAL"
-    if (vipState === 'ACTIVE') return; // Don't trigger if already active
-    
-    generateNewVipSignal();
+  // Remove automatic VIP signal generation on switch
+  const handleVipSwitch = () => {
+    if (isAnalyzing) return;
+    setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
+    setIsVipMode(true);
+    setVipSignal('');
+    setVipState('WAITING');
+    // generateNewVipSignal() is no longer called here automatically
   };
 
   const handleNextSignal = () => {
@@ -76,8 +82,8 @@ export const UserPanel: React.FC = () => {
     setIsAnalyzing(true);
     setVipSignal('');
     
-    // Force 2 seconds loading delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Force 1 second loading delay for snappier feel
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -148,14 +154,7 @@ export const UserPanel: React.FC = () => {
               BD Win 24
             </button>
             <button
-              onClick={() => {
-                if (isAnalyzing) return;
-                setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
-                setIsVipMode(true);
-                setVipSignal('');
-                setVipState('WAITING');
-                generateNewVipSignal();
-              }}
+              onClick={handleVipSwitch}
               className={cn(
                 "flex-1 py-3 px-4 rounded-xl text-sm font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-1.5 shadow-lg",
                 isVipMode 
