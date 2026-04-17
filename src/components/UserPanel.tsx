@@ -73,6 +73,11 @@ export const UserPanel: React.FC = () => {
     // generateNewVipSignal() is no longer called here automatically
   };
 
+  const handleManualVipSignal = () => {
+    if (isAnalyzing || vipState === 'ACTIVE') return;
+    generateNewVipSignal();
+  };
+
   const handleNextSignal = () => {
     // Force a new signal regardless of state
     generateNewVipSignal();
@@ -82,8 +87,8 @@ export const UserPanel: React.FC = () => {
     setIsAnalyzing(true);
     setVipSignal('');
     
-    // Force 1 second loading delay for snappier feel
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Force 0.8 seconds loading delay for a very snappy feel
+    await new Promise(resolve => setTimeout(resolve, 800));
     
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -120,7 +125,7 @@ export const UserPanel: React.FC = () => {
   useHeartbeat();
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-[#f8fafc] relative font-sans select-text overflow-hidden">
+    <div className="flex flex-col h-[100dvh] bg-[#020617] relative font-sans select-text overflow-hidden">
       <WelcomeModal />
       <ResultOverlay result={result} onComplete={() => setResult(null)} />
       <div className="z-20 relative shrink-0">
@@ -135,7 +140,7 @@ export const UserPanel: React.FC = () => {
           onNextSignal={handleNextSignal}
           isAnalyzing={isAnalyzing}
         />
-        <div className="flex gap-1.5 p-1.5 bg-white border-b border-gray-100">
+        <div className="flex gap-1.5 p-1 bg-[#0f172a] border-b border-white/5">
           <button
             onClick={() => {
               if (isAnalyzing) return;
@@ -143,11 +148,10 @@ export const UserPanel: React.FC = () => {
               setIsVipMode(false);
             }}
             className={cn(
-              "flex-1 py-2 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all active:scale-95",
+              "flex-1 py-1.5 px-3 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all active:scale-95",
               currentUrl === 'https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web' && !isVipMode
-                ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/20" 
-                : "bg-gray-50 text-gray-400 hover:bg-gray-100",
-              isAnalyzing && "opacity-50 cursor-not-allowed"
+                ? "bg-[#2563eb] text-white shadow-[0_0_15px_rgba(37,99,235,0.3)]" 
+                : "bg-white/5 text-white/40 hover:bg-white/10"
             )}
           >
             BD Win 24
@@ -155,21 +159,20 @@ export const UserPanel: React.FC = () => {
           <button
             onClick={handleVipSwitch}
             className={cn(
-              "flex-1 py-2 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-1 shadow-md",
+              "flex-1 py-1.5 px-3 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-1",
               isVipMode 
-                ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-amber-500/30" 
-                : "bg-gray-50 text-gray-400 hover:bg-gray-100",
-              isAnalyzing && "opacity-50 cursor-not-allowed"
+                ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-[0_0_15px_rgba(245,158,11,0.3)]" 
+                : "bg-white/5 text-white/40 hover:bg-white/10"
             )}
           >
             VIP ❤️
           </button>
         </div>
       </div>
-      <div className="flex-1 relative z-0 overflow-hidden bg-white">
+      <div className="flex-1 relative z-0 overflow-hidden bg-[#020617]">
         <iframe
           src={currentUrl}
-          className="absolute inset-0 w-full h-full border-none bg-white"
+          className="absolute inset-0 w-full h-full border-none bg-[#020617]"
           title="Game View"
           allow="clipboard-write; fullscreen"
           loading="lazy"
