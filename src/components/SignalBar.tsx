@@ -154,23 +154,23 @@ export const SignalBar: React.FC<SignalBarProps> = ({
   }
 
   return (
-    <div className="relative flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-gray-100 h-[64px]">
+    <div className="relative flex items-center justify-between px-4 py-2 bg-white border-b border-gray-100 h-[56px]">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1.5">
-          <span className="text-gray-400 font-bold text-base">P:</span>
-          <span className="font-mono font-black text-black text-lg tracking-tight">
+        <div className="flex items-center gap-1">
+          <span className="text-gray-400 font-medium text-sm">P:</span>
+          <span className="font-mono font-bold text-gray-800 text-base">
             {currentPeriod?.slice(-6) || "..."}
           </span>
         </div>
         
-        <div className="relative w-8 h-8 flex items-center justify-center">
+        <div className="relative w-9 h-9 flex items-center justify-center">
           <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 24 24">
             <circle
               cx="12"
               cy="12"
               r="10.5"
               fill="none"
-              stroke="#f3f4f6"
+              stroke="#e5e7eb"
               strokeWidth="1.5"
             />
             <circle
@@ -179,14 +179,14 @@ export const SignalBar: React.FC<SignalBarProps> = ({
               r="10.5"
               fill="none"
               stroke="#2563eb"
-              strokeWidth="2"
+              strokeWidth="1.8"
               strokeDasharray="65.97"
               strokeDashoffset={65.97 * (1 - progress / 100)}
               strokeLinecap="round"
               className="transition-all duration-1000"
             />
           </svg>
-          <span className="relative font-mono font-black text-xs text-black">
+          <span className="relative font-mono font-bold text-xs text-gray-700">
             {secondsLeft}
           </span>
         </div>
@@ -198,21 +198,20 @@ export const SignalBar: React.FC<SignalBarProps> = ({
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             className={cn(
-              "flex items-center gap-3 px-7 py-2.5 rounded-full font-black text-base uppercase tracking-wider text-white transition-all shadow-xl",
+              "flex items-center gap-2 px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-white transition-all shadow-sm",
               signal === "BIG" 
-                ? "bg-[#ff3b3b] shadow-red-500/40 ring-[6px] ring-red-500/10" 
-                : "bg-[#22c55e] shadow-green-500/40 ring-[6px] ring-green-500/10"
+                ? "bg-[#22c55e]" 
+                : "bg-[#22c55e]" // In screenshot SMALL is green too
             )}
           >
-            <div className={cn(
-              "w-3 h-3 rounded-full border-2 border-white/40 shadow-[0_0_8px_rgba(255,255,255,0.8)]",
-              "bg-white" 
-            )} />
+            <div className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center border border-white/20">
+              <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_4px_white]" />
+            </div>
             {signal}
           </motion.div>
         ) : (
-          <div className="px-6 py-2.5 rounded-full bg-gray-50 text-gray-400 text-xs font-black uppercase tracking-widest animate-pulse border border-gray-100">
-            Wait...
+          <div className="px-4 py-2 rounded-full bg-gray-50 text-gray-400 text-[10px] font-black uppercase tracking-widest animate-pulse border border-gray-100">
+            WAITTING
           </div>
         )}
       </div>

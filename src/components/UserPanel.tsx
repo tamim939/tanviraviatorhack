@@ -140,7 +140,7 @@ export const UserPanel: React.FC = () => {
           onNextSignal={handleNextSignal}
           isAnalyzing={isAnalyzing}
         />
-        <div className="flex gap-1 p-1 bg-white border-b border-gray-100">
+        <div className="flex gap-2.5 p-2.5 bg-white border-b border-gray-100">
           <button
             onClick={() => {
               if (isAnalyzing) return;
@@ -148,10 +148,10 @@ export const UserPanel: React.FC = () => {
               setIsVipMode(false);
             }}
             className={cn(
-              "flex-1 py-2 px-3 rounded-md text-xs font-black uppercase tracking-wider transition-all active:scale-95",
+              "flex-1 py-3 px-4 rounded-lg text-sm font-bold uppercase tracking-wide transition-all active:scale-95",
               currentUrl === 'https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web' && !isVipMode
-                ? "bg-[#2563eb] text-white" 
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                ? "bg-[#2563eb] text-white shadow-lg shadow-blue-500/20" 
+                : "bg-[#f1f5f9] text-[#64748b] hover:bg-gray-200"
             )}
           >
             BD Win 24
@@ -159,10 +159,10 @@ export const UserPanel: React.FC = () => {
           <button
             onClick={handleVipSwitch}
             className={cn(
-              "flex-1 py-2 px-3 rounded-md text-xs font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-1",
+              "flex-1 py-3 px-4 rounded-lg text-sm font-bold uppercase tracking-wide transition-all active:scale-95 flex items-center justify-center gap-1",
               isVipMode 
-                ? "bg-[#2563eb] text-white" 
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                ? "bg-[#2563eb] text-white shadow-lg shadow-blue-500/20" 
+                : "bg-[#f1f5f9] text-[#64748b] hover:bg-gray-200"
             )}
           >
             VIP ❤️
@@ -182,7 +182,7 @@ export const UserPanel: React.FC = () => {
           href="https://t.me/+GT8s_D0ipJFkMzhl"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-[50] w-12 h-12 bg-[#0088cc] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-all border-2 border-white/20"
+          className="fixed bottom-20 right-6 z-[50] w-12 h-12 bg-[#0088cc] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-all border-2 border-white/20"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
         </a>
