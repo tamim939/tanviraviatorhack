@@ -34,18 +34,13 @@ export const useSignals = () => {
   const lastSignalRef = useRef<string>('');
   const { period: currentPeriod } = useCountdown();
 
-  // Deterministic signal generation based on period string
+  // Deterministic signal generation based on period string digits sum
   const getAutoSignal = (period: string): SignalType => {
     if (!period) return '';
     
-    // WinGo logic: 0-4 is Small, 5-9 is Big
-    // We'll use a deterministic hash to pick a "predicted" number
-    const hash = period.split('').reduce((acc, char) => {
-      return ((acc << 5) - acc) + char.charCodeAt(0);
-    }, 0);
-    
-    const predictedNumber = Math.abs(hash) % 10;
-    return predictedNumber >= 5 ? 'BIG' : 'SMALL';
+    // Logic: sum of digits % 2
+    const sum = period.split('').reduce((a, b) => a + (parseInt(b) || 0), 0);
+    return sum % 2 === 0 ? 'BIG' : 'SMALL';
   };
 
   useEffect(() => {
@@ -62,40 +57,76 @@ export const useSignals = () => {
       }
     };
 
-    // Immediate auto-signal to prevent flicker
-    if (currentPeriod) {
-      handleSignal({
-        signal: getAutoSignal(currentPeriod),
-        period: currentPeriod
-      });
-    }
-
-    const updateSignal = async () => {
+    const updateSignalFromDB = async () => {
       try {
         const latest = await fetchLatestSignal();
         
-        // If we have a manual signal for the current period, override the auto one
+        // If we have a signal for the current period, use it
         if (latest.signal && latest.period === currentPeriod) {
           handleSignal(latest);
+          return true;
         }
       } catch (error) {
-        // Silent fail, auto signal is already set
+        // Silent fail
+      }
+      return false;
+    };
+
+    const syncToDB = async (signal: SignalType, period: string) => {
+      if (!signal || !period) return;
+      try {
+        // Use a simple insert, unique constraint on period would prevent duplicates
+        // If it already exists, it will just fail silently or we can ignore it
+        await supabase
+          .from('signals')
+          .insert([
+            { signal_type: signal, period: period }
+          ]);
+      } catch (error) {
+        // Ignore errors (duplicate key, etc)
       }
     };
 
-    updateSignal();
+    const runLogic = async () => {
+      if (!currentPeriod) return;
 
-    // Real-time subscription for manual overrides
+      // 1. Calculate deterministic signal first for instant delivery
+      const autoSignal = getAutoSignal(currentPeriod);
+      handleSignal({
+        signal: autoSignal,
+        period: currentPeriod
+      });
+
+      // 2. Try to get override from DB
+      const foundInDB = await updateSignalFromDB();
+
+      // 3. If NOT found in DB, save our deterministic one so it's "set" for others
+      if (!foundInDB) {
+        await syncToDB(autoSignal, currentPeriod);
+      }
+    };
+
+    runLogic();
+
+    // Real-time subscription for manual overrides or new signals
     const channel = supabase
       .channel('signals-live')
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'signals' },
-        () => updateSignal()
+        (payload) => {
+          const newData = payload.new as any;
+          if (newData.period === currentPeriod) {
+            handleSignal({
+              signal: newData.signal_type as SignalType,
+              period: newData.period
+            });
+          }
+        }
       )
       .subscribe();
 
-    const interval = window.setInterval(updateSignal, 2000);
+    const interval = window.setInterval(updateSignalFromDB, 3000);
 
     return () => {
       active = false;

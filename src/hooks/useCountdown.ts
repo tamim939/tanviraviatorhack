@@ -66,18 +66,19 @@ export const useCountdown = (onPeriodChange?: (newPeriod: string) => void) => {
       const seconds = now.getUTCSeconds();
       const ms = now.getUTCMilliseconds();
       
-      // Based on the market time (30s cycle), we sync with UTC time.
-      // We use a small offset to account for network latency and match the game clock.
-      const elapsedInCycle = (seconds % 30) * 1000 + ms + 1000; 
-      const remaining = Math.max(0, 30 - Math.floor(elapsedInCycle / 1000));
+      const elapsed = (seconds % 30) * 1000 + ms;
+      const adjusted = elapsed + 1000; // ১ সেকেন্ড অফসেট সিঙ্ক
+      const remaining = Math.ceil((30000 - (adjusted % 30000)) / 1000);
       
-      if (remaining === 30 && secondsLeft === 1) {
+      const finalRemaining = remaining <= 0 ? 30 : remaining;
+      
+      if (finalRemaining === 30 && secondsLeft === 1) {
         if (lastPeriodRef.current) {
           onPeriodChange?.(lastPeriodRef.current);
         }
       }
       
-      setSecondsLeft(remaining === 0 ? 30 : remaining);
+      setSecondsLeft(finalRemaining);
     }, 1000);
 
     return () => {

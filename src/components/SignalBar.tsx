@@ -74,7 +74,7 @@ export const SignalBar: React.FC<SignalBarProps> = ({
 
           {/* Header */}
           <h2 className="text-amber-500/80 font-black text-[9px] tracking-[0.2em] mt-2 mb-3 uppercase w-full text-center leading-none italic">
-            Algorithm v4.2
+            TRADER TAMIM SIGNAL
           </h2>
 
           {/* Main Circle Display */}
@@ -200,8 +200,8 @@ export const SignalBar: React.FC<SignalBarProps> = ({
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-full font-black text-xs uppercase tracking-wider text-white transition-all shadow-sm",
               signal === "BIG" 
-                ? "bg-[#22c55e]" 
-                : "bg-[#22c55e]" // In screenshot SMALL is green too
+                ? "bg-red-500" 
+                : "bg-green-500"
             )}
           >
             <div className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center border border-white/20">
@@ -211,7 +211,7 @@ export const SignalBar: React.FC<SignalBarProps> = ({
           </motion.div>
         ) : (
           <div className="px-4 py-2 rounded-full bg-gray-50 text-gray-400 text-[10px] font-black uppercase tracking-widest animate-pulse border border-gray-100">
-            WAITTING
+            WAITING...
           </div>
         )}
       </div>
