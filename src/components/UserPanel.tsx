@@ -6,7 +6,6 @@ import { useSignals } from '@/src/hooks/useSignals';
 import { useCountdown } from '@/src/hooks/useCountdown';
 import { useHeartbeat } from '@/src/hooks/useHeartbeat';
 import { cn } from '@/src/lib/utils';
-import { GoogleGenAI } from "@google/genai";
 
 export const UserPanel: React.FC = () => {
   const { signal: dbSignal, period: dbPeriod } = useSignals();
@@ -91,22 +90,6 @@ export const UserPanel: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 800));
     
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        config: {
-          systemInstruction: "You are an Aviator Predictor API. Your task is to provide a realistic game multiplier prediction based on probability. Output ONLY the multiplier value followed by 'x' (e.g., '1.85x', '4.20x'). Ensure most values are under 3.5x for realism.",
-        },
-        contents: "Generate next signal"
-      });
-      
-      const signalText = response.text?.trim() || "1.50x";
-      setVipSignal(signalText);
-      setVipPeriod((Date.now() % 1000000).toString());
-      setVipState('ACTIVE');
-      setVipSeconds(15);
-    } catch (error) {
-      console.error("API Signal Error:", error);
       // Fallback distribution
       const rand = Math.random();
       let multiplier;

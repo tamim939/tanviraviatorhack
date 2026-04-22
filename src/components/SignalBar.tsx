@@ -74,7 +74,7 @@ export const SignalBar: React.FC<SignalBarProps> = ({
 
           {/* Header */}
           <h2 className="text-amber-500/80 font-black text-[9px] tracking-[0.2em] mt-2 mb-3 uppercase w-full text-center leading-none italic">
-            TRADER TAMIM SIGNAL
+            Algorithm v4.2
           </h2>
 
           {/* Main Circle Display */}

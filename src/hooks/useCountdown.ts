@@ -16,25 +16,6 @@ const calculateLocalPeriod = (): string => {
   return `${dateStr}030${periodStr}`;
 };
 
-const fetchPeriod = async (): Promise<string> => {
-  try {
-    const response = await fetch('https://uojitexpkhexpbuqujxy.supabase.co/functions/v1/get-period', {
-      headers: {
-        apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvaml0ZXhwa2hleHBidXF1anh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMTY4MzQsImV4cCI6MjA4ODg5MjgzNH0.Srmcs-ho-kq35-HSWF2C6Ua1zVNel_HFS9uu2KcBJ2o'
-      }
-    });
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
-    const data = await response.json();
-    if (data.status === 'success') return data.period;
-  } catch (error) {
-    // Silent fail to avoid flooding console, fallback to local calculation
-    return calculateLocalPeriod();
-  }
-  return calculateLocalPeriod();
-};
-
 export const useCountdown = (onPeriodChange?: (newPeriod: string) => void) => {
   const [period, setPeriod] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(30);
@@ -43,8 +24,8 @@ export const useCountdown = (onPeriodChange?: (newPeriod: string) => void) => {
   useEffect(() => {
     let active = true;
 
-    const updatePeriod = async () => {
-      const newPeriod = await fetchPeriod();
+    const updatePeriod = () => {
+      const newPeriod = calculateLocalPeriod();
       if (newPeriod && active) {
         if (newPeriod !== lastPeriodRef.current) {
           if (lastPeriodRef.current) {
@@ -66,19 +47,16 @@ export const useCountdown = (onPeriodChange?: (newPeriod: string) => void) => {
       const seconds = now.getUTCSeconds();
       const ms = now.getUTCMilliseconds();
       
-      const elapsed = (seconds % 30) * 1000 + ms;
-      const adjusted = elapsed + 1000; // ১ সেকেন্ড অফসেট সিঙ্ক
-      const remaining = Math.ceil((30000 - (adjusted % 30000)) / 1000);
+      const elapsedInCycle = (seconds % 30) * 1000 + ms; 
+      const remaining = Math.max(0, 30 - Math.floor(elapsedInCycle / 1000));
       
-      const finalRemaining = remaining <= 0 ? 30 : remaining;
-      
-      if (finalRemaining === 30 && secondsLeft === 1) {
+      if (remaining === 30 && secondsLeft === 1) {
         if (lastPeriodRef.current) {
           onPeriodChange?.(lastPeriodRef.current);
         }
       }
       
-      setSecondsLeft(finalRemaining);
+      setSecondsLeft(remaining === 0 ? 30 : remaining);
     }, 1000);
 
     return () => {
