@@ -16,7 +16,7 @@ export const UserPanel: React.FC = () => {
     }
   });
   
-  const [currentUrl, setCurrentUrl] = useState('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
+  const [currentUrl, setCurrentUrl] = useState('https://hgnice.bet/#/register?invitationCode=635311925577');
   const [isVipMode, setIsVipMode] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [vipSignal, setVipSignal] = useState<string>('');
@@ -65,7 +65,7 @@ export const UserPanel: React.FC = () => {
   // Remove automatic VIP signal generation on switch
   const handleVipSwitch = () => {
     if (isAnalyzing) return;
-    setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
+    setCurrentUrl('https://hgnice.bet/#/register?invitationCode=635311925577');
     setIsVipMode(true);
     setVipSignal('');
     setVipState('WAITING');
@@ -127,17 +127,17 @@ export const UserPanel: React.FC = () => {
           <button
             onClick={() => {
               if (isAnalyzing) return;
-              setCurrentUrl('https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web');
+              setCurrentUrl('https://hgnice.bet/#/register?invitationCode=635311925577');
               setIsVipMode(false);
             }}
             className={cn(
               "flex-1 py-3 px-4 rounded-lg text-sm font-bold uppercase tracking-wide transition-all active:scale-95",
-              currentUrl === 'https://23bdwin24.com/register?inviteCode=6QB3D5N&from=web' && !isVipMode
+              currentUrl === 'https://hgnice.bet/#/register?invitationCode=635311925577' && !isVipMode
                 ? "bg-[#2563eb] text-white shadow-lg shadow-blue-500/20" 
                 : "bg-[#f1f5f9] text-[#64748b] hover:bg-gray-200"
             )}
           >
-            BD Win 24
+            HG NICE
           </button>
           <button
             onClick={handleVipSwitch}
